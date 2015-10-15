@@ -156,7 +156,7 @@ class Family {
         var totalIncome = 0.0
         for p in self.members {
             if p.job != nil {
-                totalIncome += p.job!.calculateIncome(hours : 8760.0)
+                totalIncome += p.job!.calculateIncome(hours : 8760.0) //a year's worth of hours
             }
         }
         return totalIncome
