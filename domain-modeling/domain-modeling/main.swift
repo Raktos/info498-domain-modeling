@@ -133,6 +133,38 @@ class Person {
     func toString() -> String {
         let title = self.job != nil ? self.job!.title : "unemployed"
         let spouseName = self.spouse != nil ? "\(self.spouse!.firstName) \(self.spouse!.lastName)" : "unmarried"
-        return "\(self.firstName) \(self.lastName)\nAge: (self.age) years\nJob: \(title)\nSpouse: \(spouseName)"
+        return "\(self.firstName) \(self.lastName)\nAge: \(self.age) years\nJob: \(title)\nSpouse: \(spouseName)"
     }
 }
+
+var p1 = Person(firstName : "John", lastName : "Dole", age : 57, job : j)
+println(p1.toString())
+var p2 = Person(firstName : "Joanne", lastName : "Dole", age : 55, spouse : p1)
+println(p2.toString())
+var p3 = Person(firstName : "Bobby", lastName : "Dole", age : 15, job : j, spouse : p1)
+println(p3.toString())
+
+class Family {
+    var members : [Person]
+    
+    init(members : [Person]) {
+        //make sure one member is 21+
+        self.members = members
+    }
+    
+    func householdIncome() -> Double{
+        var totalIncome = 0.0
+        for p in self.members {
+            if p.job != nil {
+                totalIncome += p.job!.calculateIncome(hours : 8760.0)
+            }
+        }
+        return totalIncome
+    }
+    
+    func haveChild() -> Void {
+        self.members.append(Person(firstName : "new", lastName : "baby", age : 0))
+    }
+}
+
+var f = Family(members : [p1,p2,p3])
