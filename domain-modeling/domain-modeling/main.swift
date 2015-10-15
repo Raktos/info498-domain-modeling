@@ -14,7 +14,7 @@ enum Currency {
 
 struct Money {
     
-    var amount : Double
+    private var amount : Double
     var currency : Currency
     
     init(amount : Double, currency : Currency) {
@@ -55,21 +55,24 @@ struct Money {
     }
 }
 
+print("Money Tests:")
 var m = Money(amount : 0.0, currency : Currency.usd)
+print("Created a Money in USD with 0.0\n")
 m.add(5.0, currency : Currency.gbp)
-println(m.getAmount())
+print("added 5GBP. currently contains \(m.getAmount()) in USD\n")
 m.add(10, currency : Currency.can)
-println(m.getAmount())
+print("added 10CAN. currently contains \(m.getAmount()) in USD\n")
 m.add(9, currency : Currency.eur)
-println(m.getAmount())
+print("added 9EUR. currently contains\(m.getAmount()) in USD\n")
 m.convert(Currency.gbp)
-println(m.getAmount())
+print("convert to GBP. currently contains \(m.getAmount()) in GBP \n")
 m.convert(Currency.eur)
-println(m.getAmount())
+print("convert to EUR. currently contains \(m.getAmount()) in EUR\n")
 m.convert(Currency.can)
-println(m.getAmount())
+print("conver to CAN. currently contains \(m.getAmount()) in CAN\n")
 m.add(10.0, currency : Currency.gbp)
-println(m.getAmount())
+print("added 10GBP. currently contains \(m.getAmount()) in CAN \n")
+print("\n")
 
 enum SalaryType {
     case yearly, hourly
@@ -98,20 +101,21 @@ class Job {
     }
 }
 
+print("Job Tests:\n")
 var j = Job(title : "programmer", salary : 80000.0, salaryType : SalaryType.yearly)
-println(j.calculateIncome())
+print("Job with income of \(j.calculateIncome()) yearly\n")
 j.raise(10)
-println(j.calculateIncome(hours : 150.0))
+print("raise of 10%. income is now \(j.calculateIncome())\n")
 j = Job(title : "lab tech", salary : 20.0, salaryType : SalaryType.hourly)
-println(j.calculateIncome(hours : 100.0))
-println(j.calculateIncome())
+print("Job with income of 20 hourly makes \(j.calculateIncome(hours: 100.0)) in 100 hours\n")
+print("\n")
 
 class Person {
     let firstName : String
     let lastName : String
     let age : Int
     var job : Job?
-    var spouse : Person?
+    weak var spouse : Person?
     
     init(firstName : String, lastName : String, age : Int, job : Job? = nil, spouse : Person? = nil) {
         self.firstName = firstName
@@ -133,22 +137,34 @@ class Person {
     func toString() -> String {
         let title = self.job != nil ? self.job!.title : "unemployed"
         let spouseName = self.spouse != nil ? "\(self.spouse!.firstName) \(self.spouse!.lastName)" : "unmarried"
-        return "\(self.firstName) \(self.lastName)\nAge: \(self.age) years\nJob: \(title)\nSpouse: \(spouseName)"
+        return "\(self.firstName) \(self.lastName)\nAge: \(self.age) years\nJob: \(title)\nSpouse: \(spouseName)\n"
     }
 }
 
-var p1 = Person(firstName : "John", lastName : "Dole", age : 57, job : j)
-println(p1.toString())
-var p2 = Person(firstName : "Joanne", lastName : "Dole", age : 55, spouse : p1)
-println(p2.toString())
+print("Person Tests:\n")
+var p1 = Person(firstName : "John", lastName : "Dole", age : 47, job : j)
+print("\(p1.toString())\n")
+var p2 = Person(firstName : "Joanne", lastName : "Dole", age : 45, spouse : p1)
+print("\(p2.toString())\n")
+p1.spouse = p2
+print("\(p1.toString())\n")
 var p3 = Person(firstName : "Bobby", lastName : "Dole", age : 15, job : j, spouse : p1)
-println(p3.toString())
+print("\(p3.toString())\n")
 
 class Family {
     var members : [Person]
     
-    init(members : [Person]) {
-        //make sure one member is 21+
+    init?(members : [Person]) {
+//        var legalFamily : Bool = false
+//        for p in members {
+//            if p.age > 20 {
+//                legalFamily = true
+//            }
+//        }
+//
+//        if !legalFamily {
+//            return nil
+//        }
         self.members = members
     }
     
