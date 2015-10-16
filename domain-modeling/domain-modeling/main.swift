@@ -31,7 +31,7 @@ struct Money {
         self.amount += amt
     }
     
-    mutating func subtract(var amt : Double, currency : Currency) -> Void{
+    mutating func subtract(var amt : Double, currency : Currency) -> Void {
         amt = convertToUSD(amt, currency : currency)
         self.amount -= amt
     }
@@ -113,7 +113,7 @@ print("\n")
 class Person {
     let firstName : String
     let lastName : String
-    let age : Int
+    var age : Int
     var job : Job?
     weak var spouse : Person?
     
@@ -152,19 +152,19 @@ var p3 = Person(firstName : "Bobby", lastName : "Dole", age : 15, job : j, spous
 print("\(p3.toString())\n")
 
 class Family {
-    var members : [Person]
+    var members : [Person] = []
     
     init?(members : [Person]) {
-//        var legalFamily : Bool = false
-//        for p in members {
-//            if p.age > 20 {
-//                legalFamily = true
-//            }
-//        }
-//
-//        if !legalFamily {
-//            return nil
-//        }
+        var legalFamily : Bool = false
+        for p in members {
+            if p.age > 20 {
+                legalFamily = true
+            }
+        }
+
+        if !legalFamily {
+            return nil
+        }
         self.members = members
     }
     
@@ -184,3 +184,22 @@ class Family {
 }
 
 var f = Family(members : [p1,p2,p3])
+print("Family Tests:\n")
+print("Creatin famiy of John, Joanne, and Bobby\n")
+if f == nil {
+    print(f)
+}else {
+    for p in f!.members {
+        print("\(p.toString())\n")
+    }
+}
+
+f = Family(members: [p3])
+print("creaing family of just Bob\n")
+if f == nil {
+    print("family is nil")
+}else {
+    for p in f!.members {
+        print("\(p.toString())\n")
+    }
+}
