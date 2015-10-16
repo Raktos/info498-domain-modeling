@@ -8,13 +8,17 @@
 
 import Foundation
 
+//currency enum
 enum Currency {
         case usd, gbp, eur, can
 }
 
+//Money struct
+//functions more like a bank account, the spec was a bit vague this is my best interpretation
 struct Money {
-    
-    private var amount : Double
+    //actual value ALWAYS STORED IN USD
+    var amount : Double
+    //currency type
     var currency : Currency
     
     init(amount : Double, currency : Currency) {
@@ -22,20 +26,24 @@ struct Money {
         self.currency = currency
     }
     
+    //convert changes the "type" of currency, the amount is independant
     mutating func convert(currency : Currency) {
         self.currency = currency
     }
     
+    //add to the amount
     mutating func add(var amt : Double, currency : Currency) -> Void {
         amt = convertToUSD(amt, currency : currency)
         self.amount += amt
     }
     
+    //subtract from the amount
     mutating func subtract(var amt : Double, currency : Currency) -> Void {
         amt = convertToUSD(amt, currency : currency)
         self.amount -= amt
     }
     
+    //display the amount in the proper currency type
     func getAmount() -> Double {
         switch self.currency {
         case .can: return self.amount * 1.25
@@ -45,6 +53,7 @@ struct Money {
         }
     }
     
+    //converts to USD, only used internaly for mathematics
     private func convertToUSD(var amt : Double, currency : Currency) -> Double {
         switch currency {
         case .can: return amt * 0.8
@@ -74,10 +83,12 @@ m.add(10.0, currency : Currency.gbp)
 print("added 10GBP. currently contains \(m.getAmount()) in CAN \n")
 print("\n")
 
+//salary type
 enum SalaryType {
     case yearly, hourly
 }
 
+//Job class
 class Job {
     var title : String
     var salary : Double
@@ -89,6 +100,7 @@ class Job {
         self.salaryType = salaryType
     }
     
+    //calculates income for passed # of hours, ignored the parameter if salary type is yearly
     func calculateIncome(hours : Double = 0.0) -> Double{
         switch self.salaryType {
         case .yearly: return self.salary
@@ -96,6 +108,7 @@ class Job {
         }
     }
     
+    //increases the salary by a passed percentage (as a Double)
     func raise(raisePercent : Double) -> Void {
         self.salary *= 1 + raisePercent / 100
     }
@@ -110,6 +123,7 @@ j = Job(title : "lab tech", salary : 20.0, salaryType : SalaryType.hourly)
 print("Job with income of 20 hourly makes \(j.calculateIncome(hours: 100.0)) in 100 hours\n")
 print("\n")
 
+//Person class
 class Person {
     let firstName : String
     let lastName : String
@@ -122,11 +136,13 @@ class Person {
         self.lastName = lastName
         self.age = age
         
+        //if the age is <16 force job to nil
         if age < 16 {
             self.job = nil
         } else {
             self.job = job
         }
+        //if age is <18 force spouse to nil
         if age < 18 {
             self.spouse = nil
         } else {
@@ -134,6 +150,8 @@ class Person {
         }
     }
     
+    //returns person as a string representation
+    //default job and spouse if they are nil
     func toString() -> String {
         let title = self.job != nil ? self.job!.title : "unemployed"
         let spouseName = self.spouse != nil ? "\(self.spouse!.firstName) \(self.spouse!.lastName)" : "unmarried"
@@ -151,9 +169,11 @@ print("\(p1.toString())\n")
 var p3 = Person(firstName : "Bobby", lastName : "Dole", age : 15, job : j, spouse : p1)
 print("\(p3.toString())\n")
 
+//family class
 class Family {
     var members : [Person] = []
     
+    //initialisation will fail and return nil if there are no passed member 21 or older
     init?(members : [Person]) {
         var legalFamily : Bool = false
         for p in members {
@@ -168,6 +188,7 @@ class Family {
         self.members = members
     }
     
+    //returns combined yearly income of all members
     func householdIncome() -> Double{
         var totalIncome = 0.0
         for p in self.members {
@@ -178,14 +199,24 @@ class Family {
         return totalIncome
     }
     
-    func haveChild() -> Void {
-        self.members.append(Person(firstName : "new", lastName : "baby", age : 0))
+    func haveChild(firstName : String, lastName : String) -> Void {
+        self.members.append(Person(firstName : firstName, lastName : lastName, age : 0))
     }
 }
 
-var f = Family(members : [p1,p2,p3])
 print("Family Tests:\n")
-print("Creatin famiy of John, Joanne, and Bobby\n")
+print("Creating famiy of John, Joanne, and Bobby\n")
+var f = Family(members : [p1,p2,p3])
+if f == nil {
+    print(f)
+}else {
+    for p in f!.members {
+        print("\(p.toString())\n")
+    }
+}
+
+print("Added new faily member Mary\n")
+f!.haveChild("Mary", lastName : "Dole")
 if f == nil {
     print(f)
 }else {
@@ -195,7 +226,7 @@ if f == nil {
 }
 
 f = Family(members: [p3])
-print("creaing family of just Bob\n")
+print("Creating family of just Bob\n")
 if f == nil {
     print("family is nil")
 }else {
