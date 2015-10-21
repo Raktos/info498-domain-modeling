@@ -8,10 +8,12 @@
 
 import Foundation
 
+//string convertable protocol
 protocol CustomStringConvertable {
     var description : String { get }
 }
 
+//mathematics protocol
 protocol Mathematics {
     mutating func add(amt : Double, currency : Currency)
     mutating func subtract(amt : Double, currency : Currency)
@@ -82,8 +84,6 @@ struct Money : CustomStringConvertable, Mathematics {
         default : return amt
         }
     }
-    
-    //Mathematics protocol
 }
 
 print("Money Tests:")
@@ -118,9 +118,6 @@ print("CustomStringConvertable test: " + m.description + "\n")
 m.add(10.0, currency : Currency.gbp)
 print("added 10GBP. currently contains \(m.getAmount()) in CAN \n")
 print("CustomStringConvertable test: " + m.description + "\n")
-
-print("\nMathematics protocol tests: \n")
-
 
 print("\n")
 
